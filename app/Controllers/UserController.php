@@ -6,10 +6,8 @@ use App\Logger;
 
 class UserController
 {
-    // private $logger;
     public function __construct(private Logger $logger)
     {
-        // $this->logger = $logger;
     }
 
     public function index()
