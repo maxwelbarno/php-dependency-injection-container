@@ -5,15 +5,15 @@ namespace App;
 class Config
 {
     protected array $config;
-    public function __construct()
+    public function __construct(array $env)
     {
         $this->config = [
             'db' => [
-                'host' => 'localhost',
-                'driver' => 'mysql',
-                'name' => 'auth',
-                'user' => 'admin',
-                'password' => 'admin123'
+                'host' => $env['DB_HOST'],
+                'driver' => $env['DB_DRIVER'] ?? 'mysql',
+                'name' => $env['DB_NAME'],
+                'user' => $env['DB_USER'],
+                'password' => $env['DB_PASSWORD'],
                 ]
         ];
     }

@@ -2,23 +2,17 @@
 
 namespace App\Controllers;
 
-use App\Config;
 use App\DB;
 use App\Logger;
 
 class UserController
 {
-    private DB $db;
-    private Config $config;
-    public function __construct(private Logger $logger)
+    public function __construct(private Logger $logger, private DB $db)
     {
-        $this->config = new Config();
-        $this->db = new DB($this->config->db);
     }
 
     public function index()
     {
-
         return $this->logger->log("We are logged in");
     }
 

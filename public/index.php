@@ -1,11 +1,12 @@
 <?php
 
-use App\Controllers\UserController;
-use App\Logger;
+use App\App;
+use App\Config;
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-$logger = new Logger();
-$controller = new UserController($logger);
-
-echo $controller->getUsers();
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
+$config = new Config($_ENV);
+$app = new App($config);
+$app->run();
