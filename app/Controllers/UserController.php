@@ -2,8 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Services\UserService;
-use App\Services\UserServiceInterface;
+use App\Interfaces\UserServiceInterface;
 
 class UserController
 {

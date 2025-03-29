@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Interfaces\UserServiceInterface;
 use App\Logger;
 
-class UserService implements UserServiceInterface
+class AuthService implements UserServiceInterface
 {
     public function __construct(private Logger $logger, private DbService $dbService)
     {

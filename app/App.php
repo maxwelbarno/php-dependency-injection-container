@@ -3,17 +3,16 @@
 namespace App;
 
 use App\Controllers\UserController;
+use App\Interfaces\UserServiceInterface;
+use App\Services\AuthService;
 use App\Services\DbService;
 use App\Services\UserService;
-use App\Services\UserServiceInterface;
 
 class App
 {
-    // public static Container $container;
-
     public function __construct(protected Container $container, private Config $config)
     {
-        $this->container->set(UserServiceInterface::class, UserService::class);
+        $this->container->set(UserServiceInterface::class, AuthService::class);
         $this->container->set(Logger::class, fn()=>new Logger());
         $this->container->set(Config::class, function () {
             return $this->config;
