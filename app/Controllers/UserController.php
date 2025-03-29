@@ -2,25 +2,16 @@
 
 namespace App\Controllers;
 
-use App\DB;
-use App\Logger;
+use App\Services\UserService;
 
 class UserController
 {
-    public function __construct(private Logger $logger, private DB $db)
+    public function __construct(private UserService $userService)
     {
     }
 
     public function index()
     {
-        return $this->logger->log("We are logged in");
-    }
-
-    public function getUsers()
-    {
-        $users = $this->db->query("SELECT * FROM users");
-        foreach ($users as $user) {
-            $this->logger->log('User: ' . $user['username'] . ' Password: ' . $user['password']);
-        }
+        return $this->userService->getUsers();
     }
 }
