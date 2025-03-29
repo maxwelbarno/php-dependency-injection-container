@@ -5,30 +5,29 @@ namespace App;
 use App\Controllers\UserController;
 use App\Services\DbService;
 use App\Services\UserService;
+use App\Services\UserServiceInterface;
 
 class App
 {
-    public static Container $container;
+    // public static Container $container;
 
-    public function __construct(private Config $config)
+    public function __construct(protected Container $container, private Config $config)
     {
-        static::$container = new Container();
-        static::$container->set(Logger::class, fn()=>new Logger());
-
-        static::$container->set(Config::class, function () {
+        $this->container->set(UserServiceInterface::class, UserService::class);
+        $this->container->set(Logger::class, fn()=>new Logger());
+        $this->container->set(Config::class, function () {
             return $this->config;
         });
 
-        static::$container->set(DB::class, function () {
-            return new DB($this->config->db);
-        });
+        $this->container->set(DB::class, fn()=> new DB($this->config->db));
 
-        static::$container->set(DbService::class, function (Container $c) {
+
+        $this->container->set(DbService::class, function (Container $c) {
             $db = $c->get(DB::class);
             return new DbService($db);
         });
 
-        static::$container->set(UserService::class, function (Container $c) {
+        $this->container->set(UserService::class, function (Container $c) {
             $logger = $c->get(Logger::class);
             $dbService = $c->get(DbService::class);
             return new UserService($logger, $dbService);
@@ -37,7 +36,7 @@ class App
 
     public function run()
     {
-        $controller = static::$container->get(UserController::class);
+        $controller = $this->container->get(UserController::class);
         echo $controller->index();
     }
 }

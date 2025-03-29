@@ -14,8 +14,14 @@ class Container
     {
         if ($this->has($class)) {
             $entry = $this->entries[$class];
-            return $entry($this);
+
+            if (is_callable($entry)) {
+                return $entry($this);
+            }
+            // If it is a fully qualified class name(string), then set $class to it
+            $class = $entry;
         }
+        // Reflection-based autowiring
         return $this->resolve($class);
     }
 
@@ -24,7 +30,7 @@ class Container
         return isset($this->entries[$class]);
     }
 
-    public function set(string $class, callable $concrete)
+    public function set(string $class, callable|string $concrete)
     {
         $this->entries[$class] = $concrete;
     }
