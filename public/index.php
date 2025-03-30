@@ -7,7 +7,17 @@ $dotenv->load();
 
 $container = new \App\Container();
 $router = new \App\Router($container);
-$router->get('/', [\App\Controllers\UserController::class, "index"]);
+$router->registerRoutesFromControllerAttributes(
+    [
+    \App\Controllers\UserController::class,
+    \App\Controllers\GeneratorController::class
+    ]
+);
+
+echo "<pre>";
+print_r($router->getRoutes());
+echo "</pre>";
+
 
 $config = new \App\Config($_ENV);
 $request = ['uri' => $_SERVER['REQUEST_URI'],'method' => $_SERVER['REQUEST_METHOD']];

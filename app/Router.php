@@ -2,12 +2,29 @@
 
 namespace App;
 
+use App\Attributes\Route;
+
 class Router
 {
     private array $routes = [];
     public function __construct(private Container $container)
     {
     }
+
+    public function registerRoutesFromControllerAttributes(array $controllers)
+    {
+        foreach ($controllers as $controller) {
+            $reflectionController = new \ReflectionClass($controller);
+            foreach ($reflectionController->getMethods() as $method) {
+                $attributes = $method->getAttributes(Route::class, \ReflectionAttribute::IS_INSTANCEOF);
+                foreach ($attributes as $attribute) {
+                    $route = $attribute->newInstance();
+                    $this->register($route->method, $route->path, [$controller, $method->getName()]);
+                }
+            }
+        }
+    }
+
     public function register(string $registerMethod, string $route, callable|array $action)
     {
         $this->routes[$registerMethod][$route] = $action;
