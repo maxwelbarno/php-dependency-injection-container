@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Controllers\UserController;
 use App\Interfaces\UserServiceInterface;
 use App\Services\AuthService;
 use App\Services\DbService;
@@ -10,8 +9,12 @@ use App\Services\UserService;
 
 class App
 {
-    public function __construct(protected Container $container, private Config $config)
-    {
+    public function __construct(
+        protected Container $container,
+        protected Router $router,
+        protected array $request,
+        private Config $config
+    ) {
         $this->container->set(Logger::class, fn()=>new Logger());
         $this->container->set(DB::class, fn()=> new DB($this->config->db));
         $this->container->set(Config::class, function () {
@@ -34,7 +37,11 @@ class App
 
     public function run()
     {
-        $controller = $this->container->get(UserController::class);
-        echo $controller->index();
+        try {
+            echo $this->router->resolve($this->request['uri'], $this->request['method']);
+        } catch (\App\Exceptions\NotFoundException $e) {
+            http_response_code(404);
+            echo View::make("error/404");
+        }
     }
 }

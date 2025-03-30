@@ -12,6 +12,6 @@ class UserController
 
     public function index()
     {
-        return $this->userService->getUsers();
+        return \App\View::make('index', ['users' => $this->userService->getUsers()]);
     }
 }

@@ -13,9 +13,6 @@ class AuthService implements UserServiceInterface
 
     public function getUsers()
     {
-        $users = $this->dbService->fetchAll();
-        foreach ($users as $user) {
-            $this->logger->log('User: ' . $user['username'] . ' Password: ' . $user['password']);
-        }
+        return $this->dbService->fetchAll();
     }
 }
