@@ -12,19 +12,18 @@ class App
 {
     public function __construct(protected Container $container, private Config $config)
     {
-        $this->container->set(UserServiceInterface::class, AuthService::class);
         $this->container->set(Logger::class, fn()=>new Logger());
+        $this->container->set(DB::class, fn()=> new DB($this->config->db));
         $this->container->set(Config::class, function () {
             return $this->config;
         });
-
-        $this->container->set(DB::class, fn()=> new DB($this->config->db));
-
 
         $this->container->set(DbService::class, function (Container $c) {
             $db = $c->get(DB::class);
             return new DbService($db);
         });
+
+        $this->container->set(UserServiceInterface::class, AuthService::class);
 
         $this->container->set(UserService::class, function (Container $c) {
             $logger = $c->get(Logger::class);
