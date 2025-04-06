@@ -14,7 +14,9 @@ class Config
                 'name' => $env['DB_NAME'],
                 'user' => $env['DB_USER'],
                 'password' => $env['DB_PASSWORD'],
-                ]
+            ],
+            'mailer' => ['dsn' => $env['MAILER_DSN'] ?? '']
+
         ];
     }
 

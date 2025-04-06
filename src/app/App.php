@@ -4,8 +4,10 @@ namespace App;
 
 use App\Interfaces\UserServiceInterface;
 use App\Services\AuthService;
+use App\Services\CustomMailer;
 use App\Services\DbService;
 use App\Services\UserService;
+use Symfony\Component\Mailer\MailerInterface;
 
 class App
 {
@@ -27,6 +29,7 @@ class App
         });
 
         $this->container->set(UserServiceInterface::class, AuthService::class);
+        $this->container->set(MailerInterface::class, fn()=>new CustomMailer($this->config->mailer['dsn']));
 
         $this->container->set(UserService::class, function (Container $c) {
             $logger = $c->get(Logger::class);

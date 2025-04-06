@@ -7,12 +7,13 @@ use App\Attributes\Post;
 use App\Attributes\Put;
 use App\Interfaces\UserServiceInterface;
 use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\Email;
 
 class UserController
 {
-    public function __construct(private UserServiceInterface $userService)
+    public function __construct(private UserServiceInterface $userService, protected MailerInterface $mailer)
     {
     }
 
@@ -44,22 +45,19 @@ class UserController
     public function register()
     {
         $name = $_POST['name'];
-        $email = $_POST['email'];
+        $mail = $_POST['email'];
         $firstname = explode(' ', $name)[0];
 
-        $text = <<<Body
+        $html = <<<HTML
+        <h1 style='text-align:center; color:blue;'>Welcome</h1>
         Hello $firstname, 
+        <br/>
         Thank you for signing up!
-        Body;
+        HTML;
 
         $email = new Email();
-        $email->from('support@example.com')->to($_POST['email'])->subject('Welcome')->text($text);
-
-        $dsn = 'smtp://mailhog:1025';
-
-        $transport = Transport::fromDsn($dsn);
-
-        $mailer = new Mailer($transport);
+        $email->from('support@example.com')->to($mail)->subject('Welcome!')->html($html);
+        $this->mailer->send($email);
 
 
         return \App\View::make('users/register');

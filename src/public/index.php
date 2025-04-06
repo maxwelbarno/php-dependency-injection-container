@@ -15,11 +15,6 @@ $router->registerRoutesFromControllerAttributes(
     ]
 );
 
-echo "<pre>";
-print_r($router->getRoutes());
-echo "</pre>";
-
-
 $config = new \App\Config($_ENV);
 $request = ['uri' => $_SERVER['REQUEST_URI'],'method' => $_SERVER['REQUEST_METHOD']];
 $app = new \App\App($container, $router, $request, $config);
